@@ -4,9 +4,6 @@ import android.graphics.Canvas;
 import android.util.Log;
 import android.view.SurfaceHolder;
 
-/**
- * Created by Benjamin on 29/11/2014.
- */
 public class GameLoop extends Thread {
 
     private String TAG = "GAME LOOP";
