@@ -40,10 +40,8 @@ public class GameLoop extends Thread {
         long timeDiff = 0;
         int sleepTime = 0;
 
-
         while (running) {
             mainCanvas = null;
-
             try{
                 mainCanvas = this.surfaceHolder.lockCanvas();
                 synchronized (surfaceHolder) {

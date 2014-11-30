@@ -19,6 +19,12 @@ public class Point implements IPoint
         this.y = y;
     }
 
+    public Point(float x, float y)
+    {
+        this.x = x;
+        this.y = y;
+    }
+
     public Point(Point src)
     {
         this.x = src.x;
