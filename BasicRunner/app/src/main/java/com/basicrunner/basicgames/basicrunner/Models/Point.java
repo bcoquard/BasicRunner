@@ -25,10 +25,10 @@ public class Point implements IPoint
         this.y = y;
     }
 
-    public Point(Point src)
+    public Point(IPoint src)
     {
-        this.x = src.x;
-        this.y = src.y;
+        this.x = src.X();
+        this.y = src.Y();
     }
 
     @Override
@@ -41,6 +41,13 @@ public class Point implements IPoint
     public float Y()
     {
         return y;
+    }
+
+    public Point setLocation(IPoint src)
+    {
+        this.x = src.X();
+        this.y = src.Y();
+        return this;
     }
 
     public Point setLocation(float x, float y)

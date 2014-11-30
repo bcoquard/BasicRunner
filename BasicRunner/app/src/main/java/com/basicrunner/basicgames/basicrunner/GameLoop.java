@@ -28,7 +28,7 @@ public class GameLoop extends Thread {
 
     public void setRunning(boolean flag){
         Log.d(TAG, "running=" + flag);
-;        this.running = flag;
+        this.running = flag;
     }
 
     @Override
@@ -73,23 +73,14 @@ public class GameLoop extends Thread {
                         // add frame period to check if in next frame
                         sleepTime += FRAME_PERIOD;
                         framesSkipped++;
-
                     }
                 }
             } catch (Exception e)
             {
-
             } finally {
                 if (mainCanvas != null)
                     surfaceHolder.unlockCanvasAndPost(mainCanvas);
             }
         }
-
-
     }
-
-
-
-
 }
-

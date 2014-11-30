@@ -1,7 +1,6 @@
 package com.basicrunner.basicgames.basicrunner.Models;
 
 import android.graphics.RectF;
-
 import com.basicrunner.basicgames.basicrunner.Models.Interface.IMovableObject;
 import com.basicrunner.basicgames.basicrunner.Models.Interface.IPoint;
 
@@ -11,6 +10,7 @@ public class Obstacle implements IMovableObject
     private RectF _box;
     private Point _size;
     private boolean _isAlive;
+    private float _velocity;
 
     public Obstacle(Point position)
     {
@@ -18,6 +18,7 @@ public class Obstacle implements IMovableObject
         _position = position;
         _size = new Point(32, 32);
         _box = new RectF(_position.x, _position.y, _position.x + _size.x, _position.y + _size.y);
+        _velocity = 0.0001f;
     }
 
     @Override
@@ -42,8 +43,8 @@ public class Obstacle implements IMovableObject
         return _isAlive;
     }
 
-    public void update(int timePassed)
+    public void update()
     {
-        // TODO: move obstacle.
+        _position.y -= _velocity;
     }
 }

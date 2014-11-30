@@ -1,7 +1,6 @@
 package com.basicrunner.basicgames.basicrunner.Models;
 
 import android.graphics.RectF;
-import android.util.Log;
 import android.view.MotionEvent;
 
 import com.basicrunner.basicgames.basicrunner.Models.Interface.IGameScene;
@@ -10,62 +9,70 @@ import com.basicrunner.basicgames.basicrunner.Models.Interface.IPoint;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.RecursiveAction;
 
-public class GameScene implements IGameScene {
+public class GameScene implements IGameScene
+{
     private final String TAG = "GAME SCENE";
 
     private final Point _size = new Point(10, 20);
     private final List<Obstacle> _obstacles;
     private final Player _player;
 
-    public GameScene() {
-        _player = new Player(new Point(100, 50));
+    private IPoint _touchedPoint;
 
+    public GameScene()
+    {
+        _player = new Player();
         _obstacles = new ArrayList<Obstacle>();
-        _obstacles.add(new Obstacle(new Point(50, 50)));
+        _obstacles.add(new Obstacle(new Point(5, 20)));
+        _touchedPoint = null;
+    }
+
+    public void init()
+    {
+        _player.init(new Point(5, 1));
+        _obstacles.clear();
     }
 
     @Override
-    public IPoint getSize() {
+    public IPoint getSize()
+    {
         return _size;
     }
 
     @Override
-    public List<? extends IMovableObject> getObstacles() {
+    public List<? extends IMovableObject> getObstacles()
+    {
         return _obstacles;
     }
 
     @Override
-    public IMovableObject getPlayer() {
+    public IMovableObject getPlayer()
+    {
         return _player;
     }
 
-    public boolean isInCollision(RectF object1, RectF object2)
+    public void update()
     {
-
-        if (object1.intersect(object2))
-            return true;
-        return false;
-    }
-
-    public void update(int timePassed) {
-        _player.update(timePassed);
-
-        for (Obstacle obstacle : _obstacles) {
-            if (isInCollision(_player.getBox(), obstacle.getBox()))
+        _player.update(_touchedPoint);
+        for (Obstacle obstacle : _obstacles)
+        {
+            obstacle.update();
+            if (collide(_player.getBox(), obstacle.getBox()))
                 _player.kill();
-            else
-                obstacle.update(timePassed);
         }
-
-        Log.d(TAG, "Alive " + _player.isAlive());
-
     }
 
-    public boolean handleTouchEvent(MotionEvent event) {
-        _player.handleTouchEvent(event);
+    private boolean collide(RectF object1, RectF object2)
+    {
+        return object1.intersect(object2);
+    }
 
-        return true;
+    public void touchEvent(IPoint position, int action)
+    {
+        if (action == MotionEvent.ACTION_MOVE)
+            _touchedPoint = position;
+        else if (action == MotionEvent.ACTION_UP)
+            _touchedPoint = null;
     }
 }

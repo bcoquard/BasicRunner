@@ -3,14 +3,11 @@ package com.basicrunner.basicgames.basicrunner;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.util.Log;
-import android.view.Display;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.WindowManager;
 
-import com.basicrunner.basicgames.basicrunner.GUI.GameSceneDrawer;
+import com.basicrunner.basicgames.basicrunner.GUI.GameDrawer;
 import com.basicrunner.basicgames.basicrunner.Models.GameScene;
 import com.basicrunner.basicgames.basicrunner.Models.Point;
 
@@ -18,25 +15,27 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     private GameLoop _loop;
     private String TAG = "Game View";
     private GameScene _gameScene;
+    private final GameDrawer _gameDrawer;
 
     public GameView(Context context) {
         super(context);
-        //Link the call back event to our game view
+        // Link the call back event to our game view.
         getHolder().addCallback(this);
 
-        //Make the our game view able to receive events
+        // Make the our game view able to receive events.
         setFocusable(true);
 
-        //Create our game loop
+        // Create our game loop and game objects.
         _loop = new GameLoop(getHolder(), this);
-
         _gameScene = new GameScene();
+        _gameScene.init();
+        _gameDrawer = new GameDrawer(_gameScene);
     }
 
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-
-    }
+        _gameDrawer.init(new Point(width, height));
+     }
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
@@ -58,7 +57,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                 _loop.join();
                 retry = false;
             } catch (InterruptedException e) {
-
             }
         }
     }
@@ -67,8 +65,10 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     public boolean onTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.BUTTON_BACK)
             return super.onTouchEvent(event);
-        else
-            return _gameScene.handleTouchEvent(event);
+        // TODO: catch HUD touch here.
+        final Point indexPos = _gameDrawer.getIndexPos(new Point(event.getX(), event.getY()));
+        _gameScene.touchEvent(indexPos, event.getAction());
+        return true;
     }
 
     @Override
@@ -81,15 +81,13 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     public void updateLogic() {
-        // TODO: find correct time passed (ms).
-        final int timePassed = 0;
-        _gameScene.update(timePassed);
+        _gameScene.update();
     }
 
     public void drawLogic(Canvas canvas) {
-        //Reset The background first.
+        // Start by drawing background.
         canvas.drawColor(Color.GREEN);
-
-        GameSceneDrawer.draw(canvas, _gameScene);
+        // Draw game scene.
+        _gameDrawer.draw(canvas);
     }
 }
