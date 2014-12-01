@@ -1,14 +1,16 @@
 package com.basicrunner.basicgames.basicrunner.Models;
 
 import android.graphics.RectF;
-import android.view.MotionEvent;
+import android.util.Log;
 
 import com.basicrunner.basicgames.basicrunner.Models.Interface.IMovableObject;
 import com.basicrunner.basicgames.basicrunner.Models.Interface.IPoint;
 
+import java.util.List;
+
 public class Player implements IMovableObject
 {
-    private String TAG = "PLAYER";
+    private String TAG = getClass().getSimpleName();
 
     private Point _position;
     private Point _size;
@@ -18,7 +20,7 @@ public class Player implements IMovableObject
 
     public Player()
     {
-        _velocity = 0.05f;
+        _velocity = 0.1f;
         _position = new Point();
         _size = new Point(1, 1);
         _box = new RectF(_position.x, _position.y, _position.x + _size.x, _position.y + _size.y);
@@ -62,19 +64,32 @@ public class Player implements IMovableObject
 
     public void moveTo(IPoint directionPoint)
     {
-        if (directionPoint.X() > _position.x)
-            _position.x += _velocity;
-        else if (directionPoint.X() < _position.x)
-            _position.x -= _velocity;
-        _box.left = _position.x;
-        _box.top = _position.y;
+        Log.d(TAG, "object: " + _position + " -- doigt: " + directionPoint);
+        float tmpVelocity = _velocity;
+
+        if (directionPoint.X() > _position.x + _size.x / 2)
+        {
+            if (directionPoint.X() - (_position.X() + _size.X() / 2) < _velocity)
+                tmpVelocity = directionPoint.X() - (_position.X() + _size.X() / 2);
+            if (_position.X() + _size.X() / 2 + tmpVelocity > GameScene._size.X() - 1 + _size.X() / 2)
+                return;
+            _position.x += tmpVelocity;
+        }
+        else if (directionPoint.X() < _position.x  + _size.x / 2)
+        {
+            if ((_position.X() + _size.X() / 2) - directionPoint.X() < _velocity)
+                tmpVelocity = (_position.X() + _size.X() / 2) - directionPoint.X();
+            if (_position.X() - tmpVelocity < 0)
+                return;
+            _position.x -= tmpVelocity;
+        }
     }
 
     public void update(IPoint magnetPosition)
     {
         // TODO: maybe determine player position from middle of the object.
         if (magnetPosition != null)
-            _position.setLocation(magnetPosition);
-            //moveTo(magnetPosition);
+            //_position.setLocation(magnetPosition);
+            moveTo(magnetPosition);
     }
 }

@@ -12,9 +12,9 @@ import java.util.List;
 
 public class GameScene implements IGameScene
 {
-    private final String TAG = "GAME SCENE";
+    private final String TAG = getClass().getName();
 
-    private final Point _size = new Point(10, 20);
+    public static final Point _size = new Point(10, 20);
     private final List<Obstacle> _obstacles;
     private final Player _player;
 

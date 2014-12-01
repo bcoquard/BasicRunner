@@ -1,6 +1,7 @@
 package com.basicrunner.basicgames.basicrunner.Models;
 
 import android.graphics.RectF;
+
 import com.basicrunner.basicgames.basicrunner.Models.Interface.IMovableObject;
 import com.basicrunner.basicgames.basicrunner.Models.Interface.IPoint;
 
