@@ -1,25 +1,23 @@
 package com.basicrunner.basicgames.basicrunner.Models;
 
-import android.graphics.RectF;
-
 import com.basicrunner.basicgames.basicrunner.Models.Interface.IMovableObject;
 import com.basicrunner.basicgames.basicrunner.Models.Interface.IPoint;
 
 public class Obstacle implements IMovableObject
 {
+    private final String TAG = getClass().getSimpleName();
+
+    private Type _type;
     private Point _position;
-    private RectF _box;
-    private Point _size;
-    private boolean _isAlive;
+    private boolean _alive;
     private float _velocity;
 
-    public Obstacle(Point position)
+    public Obstacle(Type type, Point position)
     {
-        _isAlive = true;
+        _type = type;
         _position = position;
-        _size = new Point(32, 32);
-        _box = new RectF(_position.x, _position.y, _position.x + _size.x, _position.y + _size.y);
-        _velocity = 0.0001f;
+        _velocity = 0.2f;
+        _alive = true;
     }
 
     @Override
@@ -29,23 +27,36 @@ public class Obstacle implements IMovableObject
     }
 
     @Override
-    public RectF getBox() {
-        return _box;
-    }
-
-    @Override
     public IPoint getSize()
     {
-        return _size;
+        return _type.size;
+    }
+
+    public Type getType()
+    {
+        return _type;
     }
 
     @Override
-    public boolean isAlive() {
-        return _isAlive;
+    public boolean isAlive()
+    {
+        return _alive;
     }
 
     public void update()
     {
         _position.y -= _velocity;
+    }
+
+    public enum Type
+    {
+        Wall(new Point(0.5f, 1));
+
+        public final IPoint size;
+
+        Type(IPoint size)
+        {
+            this.size = size;
+        }
     }
 }

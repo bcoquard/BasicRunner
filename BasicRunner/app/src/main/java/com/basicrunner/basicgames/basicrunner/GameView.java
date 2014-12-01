@@ -12,8 +12,9 @@ import com.basicrunner.basicgames.basicrunner.Models.GameScene;
 import com.basicrunner.basicgames.basicrunner.Models.Point;
 
 public class GameView extends SurfaceView implements SurfaceHolder.Callback {
+    private final String TAG = getClass().getSimpleName();
+
     private GameLoop _loop;
-    private String TAG = "Game View";
     private GameScene _gameScene;
     private final GameDrawer _gameDrawer;
 

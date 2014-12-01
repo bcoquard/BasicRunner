@@ -1,20 +1,14 @@
 package com.basicrunner.basicgames.basicrunner.Models;
 
-import android.graphics.RectF;
-import android.util.Log;
-
 import com.basicrunner.basicgames.basicrunner.Models.Interface.IMovableObject;
 import com.basicrunner.basicgames.basicrunner.Models.Interface.IPoint;
 
-import java.util.List;
-
 public class Player implements IMovableObject
 {
-    private String TAG = getClass().getSimpleName();
+    private final String TAG = getClass().getSimpleName();
 
     private Point _position;
     private Point _size;
-    private RectF _box;
     private float _velocity;
     private boolean _isAlive;
 
@@ -23,7 +17,6 @@ public class Player implements IMovableObject
         _velocity = 0.1f;
         _position = new Point();
         _size = new Point(1, 1);
-        _box = new RectF(_position.x, _position.y, _position.x + _size.x, _position.y + _size.y);
         _isAlive = false;
     }
 
@@ -31,12 +24,6 @@ public class Player implements IMovableObject
     {
         this._position.setLocation(position);
         _isAlive = true;
-    }
-
-    @Override
-    public RectF getBox()
-    {
-        return _box;
     }
 
     @Override
@@ -57,14 +44,21 @@ public class Player implements IMovableObject
         return _isAlive;
     }
 
-    public void kill()
+    /**
+     * Defines the player behavior towards a collision.
+     * Current : the player dies directly.
+     *
+     * @param object Object the player entered in collision with
+     */
+    public void onCollision(IMovableObject object)
     {
+        // The implementation could change (bounce, life, ...)
         _isAlive = false;
     }
 
     public void moveTo(IPoint directionPoint)
     {
-        Log.d(TAG, "object: " + _position + " -- doigt: " + directionPoint);
+        //Log.d(TAG, "object: " + _position + " -- doigt: " + directionPoint);
         float tmpVelocity = _velocity;
 
         if (directionPoint.X() > _position.x + _size.x / 2)
@@ -75,7 +69,7 @@ public class Player implements IMovableObject
                 return;
             _position.x += tmpVelocity;
         }
-        else if (directionPoint.X() < _position.x  + _size.x / 2)
+        else if (directionPoint.X() < _position.x + _size.x / 2)
         {
             if ((_position.X() + _size.X() / 2) - directionPoint.X() < _velocity)
                 tmpVelocity = (_position.X() + _size.X() / 2) - directionPoint.X();
@@ -83,6 +77,12 @@ public class Player implements IMovableObject
                 return;
             _position.x -= tmpVelocity;
         }
+        /*
+        if (directionPoint.X() > _position.x)
+            _position.x += _velocity;
+        else if (directionPoint.X() < _position.x)
+            _position.x -= _velocity;
+        */
     }
 
     public void update(IPoint magnetPosition)

@@ -13,7 +13,7 @@ import com.basicrunner.basicgames.basicrunner.Models.Point;
 
 public class GameDrawer
 {
-    private static String TAG = "Game Scene Drawer";
+    private final String TAG = getClass().getSimpleName();
 
     private final IGameScene _gameScene;
     private final Point _screenSize;
@@ -75,8 +75,6 @@ public class GameDrawer
     public Point getIndexPos(IPoint screenPos)
     {
         final float x = screenPos.X() / _tileSize;
-        // ry = sy - t * iy
-        // iy = (sy - ry) / t
         final float y = (_screenSize.y - screenPos.Y()) / _tileSize;
         return new Point(x, y);
     }
@@ -92,7 +90,6 @@ public class GameDrawer
     {
         final IPoint pos = getScreenPos(player.getPosition());
         final IPoint size = getScreenSize(player.getSize());
-        Log.d(TAG, player.getPosition().toString() + " -> " + pos.toString() + " : " + _tileSize);
         canvas.drawRect(pos.X(), pos.Y(), pos.X() + size.X(), pos.Y() + size.Y(), _playerPaint);
     }
 
@@ -100,6 +97,7 @@ public class GameDrawer
     {
         final IPoint pos = getScreenPos(obstacle.getPosition());
         final IPoint size = getScreenSize(obstacle.getSize());
+        Log.d(TAG, obstacle.getPosition().toString() + " -> " + pos.toString() + " : " + _tileSize);
         canvas.drawRect(pos.X(), pos.Y(), pos.X() + size.X(), pos.Y() + size.Y(), _obstaclePaint);
     }
 
