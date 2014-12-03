@@ -1,16 +1,14 @@
-package com.basicrunner.basicgames.basicrunner.Menu;
+package com.basicgames.basicrunner.Menu;
 
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.view.MotionEvent;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
 import android.view.View;
 
-import com.basicrunner.basicgames.basicrunner.GUI.MenuDrawer;
-import com.basicrunner.basicgames.basicrunner.Game.Models.Point;
-import com.basicrunner.basicgames.basicrunner.MainActivity;
+import com.basicgames.basicrunner.GUI.MenuDrawer;
+import com.basicgames.basicrunner.Game.Models.Point;
+import com.basicgames.basicrunner.MainActivity;
 
 public class MenuView extends View
 {

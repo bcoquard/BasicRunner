@@ -1,4 +1,4 @@
-package com.basicrunner.basicgames.basicrunner.Game;
+package com.basicgames.basicrunner.Game;
 
 import android.graphics.Canvas;
 import android.util.Log;

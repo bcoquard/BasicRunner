@@ -1,7 +1,7 @@
-package com.basicrunner.basicgames.basicrunner.Game.Models;
+package com.basicgames.basicrunner.Game.Models;
 
-import com.basicrunner.basicgames.basicrunner.Game.Interface.IMovableObject;
-import com.basicrunner.basicgames.basicrunner.Game.Interface.IPoint;
+import com.basicgames.basicrunner.Game.Interface.IMovableObject;
+import com.basicgames.basicrunner.Game.Interface.IPoint;
 
 public class Obstacle implements IMovableObject
 {

@@ -1,12 +1,12 @@
-package com.basicrunner.basicgames.basicrunner;
+package com.basicgames.basicrunner;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
 
-import com.basicrunner.basicgames.basicrunner.Game.GameView;
-import com.basicrunner.basicgames.basicrunner.Menu.MenuView;
+import com.basicgames.basicrunner.Game.GameView;
+import com.basicgames.basicrunner.Menu.MenuView;
 
 public class MainActivity extends Activity
 {

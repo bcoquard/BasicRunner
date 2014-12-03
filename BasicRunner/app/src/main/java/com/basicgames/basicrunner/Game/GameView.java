@@ -1,16 +1,15 @@
-package com.basicrunner.basicgames.basicrunner.Game;
+package com.basicgames.basicrunner.Game;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-import com.basicrunner.basicgames.basicrunner.GUI.GameDrawer;
-import com.basicrunner.basicgames.basicrunner.Game.Models.GameScene;
-import com.basicrunner.basicgames.basicrunner.Game.Models.Point;
-import com.basicrunner.basicgames.basicrunner.MainActivity;
+import com.basicgames.basicrunner.GUI.GameDrawer;
+import com.basicgames.basicrunner.Game.Models.GameScene;
+import com.basicgames.basicrunner.Game.Models.Point;
+import com.basicgames.basicrunner.MainActivity;
 
 public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     private final String TAG = getClass().getSimpleName();

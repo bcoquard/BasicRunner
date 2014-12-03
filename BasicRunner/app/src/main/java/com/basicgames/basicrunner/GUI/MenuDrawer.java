@@ -1,10 +1,10 @@
-package com.basicrunner.basicgames.basicrunner.GUI;
+package com.basicgames.basicrunner.GUI;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 
-import com.basicrunner.basicgames.basicrunner.Game.Interface.IPoint;
+import com.basicgames.basicrunner.Game.Interface.IPoint;
 
 public class MenuDrawer
 {

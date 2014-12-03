@@ -1,15 +1,15 @@
-package com.basicrunner.basicgames.basicrunner.GUI;
+package com.basicgames.basicrunner.GUI;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.Log;
 
-import com.basicrunner.basicgames.basicrunner.Game.Interface.IGameScene;
-import com.basicrunner.basicgames.basicrunner.Game.Interface.IMovableObject;
-import com.basicrunner.basicgames.basicrunner.Game.Interface.IPoint;
-import com.basicrunner.basicgames.basicrunner.Game.Models.Player;
-import com.basicrunner.basicgames.basicrunner.Game.Models.Point;
+import com.basicgames.basicrunner.Game.Interface.IGameScene;
+import com.basicgames.basicrunner.Game.Interface.IMovableObject;
+import com.basicgames.basicrunner.Game.Interface.IPoint;
+import com.basicgames.basicrunner.Game.Models.Player;
+import com.basicgames.basicrunner.Game.Models.Point;
 
 public class GameDrawer
 {

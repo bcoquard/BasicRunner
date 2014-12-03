@@ -1,4 +1,4 @@
-package com.basicrunner.basicgames.basicrunner.Game.Interface;
+package com.basicgames.basicrunner.Game.Interface;
 
 public interface IPoint
 {
