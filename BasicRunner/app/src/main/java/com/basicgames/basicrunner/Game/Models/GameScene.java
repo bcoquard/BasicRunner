@@ -13,16 +13,13 @@ import java.util.Random;
 
 public class GameScene implements IGameScene
 {
-    private final String TAG = getClass().getName();
-
     public static final Point _size = new Point(10, 20);
-    private final int MAX_OBSTACLES = 30;
-    private final float OBSTACLE_PROB = 0.1f;
     public final static Random random = new Random();
-
-    private List<Obstacle> _obstacles;
+    private final String TAG = getClass().getName();
+    private final int MAX_OBSTACLES = 15;
+    private final float OBSTACLE_PROB = 0.1f;
     private final Player _player;
-
+    private List<Obstacle> _obstacles;
     private IPoint _touchedPoint;
 
     public GameScene()
@@ -66,7 +63,7 @@ public class GameScene implements IGameScene
             Obstacle obstacle = _obstacles.get(i);
             if (obstacle.getPosition().Y() < 0)
             {
-                _obstacles.remove(obstacle);
+                obstacle.setPosition(new Point(random.nextInt((int) _size.x), 20));
                 i--;
                 continue;
             }
@@ -80,10 +77,9 @@ public class GameScene implements IGameScene
         }
         // Add new obstacles if needed.
         if (_obstacles.size() < MAX_OBSTACLES && random.nextFloat() < OBSTACLE_PROB)
-        {
-            final Point position = new Point(random.nextInt((int) _size.x), 20);
-            _obstacles.add(new Obstacle(Obstacle.Type.Wall, position));
-        }
+            _obstacles.add(new Obstacle(Obstacle.Type.Wall,
+                    new Point(random.nextInt((int) _size.x), 20)));
+
         // TODO: Check player death and define behavior.
     }
 

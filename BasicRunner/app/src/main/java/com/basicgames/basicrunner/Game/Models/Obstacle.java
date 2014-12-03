@@ -16,7 +16,7 @@ public class Obstacle implements IMovableObject
     {
         _type = type;
         _position = position;
-        _velocity = 0.2f;
+        _velocity = 0.1f;
         _alive = true;
     }
 
@@ -24,6 +24,10 @@ public class Obstacle implements IMovableObject
     public IPoint getPosition()
     {
         return _position;
+    }
+
+    public void setPosition(Point _position) {
+        this._position = _position;
     }
 
     @Override

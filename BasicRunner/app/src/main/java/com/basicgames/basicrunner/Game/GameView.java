@@ -13,11 +13,10 @@ import com.basicgames.basicrunner.MainActivity;
 
 public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     private final String TAG = getClass().getSimpleName();
-
+    private final GameDrawer _gameDrawer;
     private MainActivity _activity;
     private GameLoop _loop;
     private GameScene _gameScene;
-    private final GameDrawer _gameDrawer;
 
     public GameView(Context context) {
         super(context);
@@ -91,7 +90,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         }
     }
 
-    public void drawLogic(Canvas canvas) {
+    public void drawLogic(Canvas canvas, String fps) {
         _gameDrawer.draw(canvas);
+        _gameDrawer.drawFPS(canvas, fps);
     }
 }
