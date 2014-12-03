@@ -5,18 +5,18 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.Log;
 
-import com.basicrunner.basicgames.basicrunner.Models.Interface.IGameScene;
-import com.basicrunner.basicgames.basicrunner.Models.Interface.IMovableObject;
-import com.basicrunner.basicgames.basicrunner.Models.Interface.IPoint;
-import com.basicrunner.basicgames.basicrunner.Models.Player;
-import com.basicrunner.basicgames.basicrunner.Models.Point;
+import com.basicrunner.basicgames.basicrunner.Game.Interface.IGameScene;
+import com.basicrunner.basicgames.basicrunner.Game.Interface.IMovableObject;
+import com.basicrunner.basicgames.basicrunner.Game.Interface.IPoint;
+import com.basicrunner.basicgames.basicrunner.Game.Models.Player;
+import com.basicrunner.basicgames.basicrunner.Game.Models.Point;
 
 public class GameDrawer
 {
     private final String TAG = getClass().getSimpleName();
 
     private final IGameScene _gameScene;
-    private final Point _screenSize;
+    private IPoint _screenSize;
     private float _tileSize;
 
     // Game object paints.
@@ -36,10 +36,10 @@ public class GameDrawer
         _textPaint.setColor(Color.RED);
     }
 
-    public void init(Point screenSize)
+    public void init(IPoint screenSize)
     {
-        _screenSize.setLocation(screenSize);
-        _tileSize = screenSize.x / _gameScene.getSize().X();
+        _screenSize = screenSize;
+        _tileSize = screenSize.X() / _gameScene.getSize().X();
         _playerPaint.setStrokeWidth(_tileSize / 10);
         _obstaclePaint.setStrokeWidth(_tileSize / 10);
         _textPaint.setStrokeWidth(_tileSize);
@@ -47,13 +47,15 @@ public class GameDrawer
 
     public boolean initialized()
     {
-        return (_tileSize != 0);
+        return (_screenSize != null);
     }
 
     public void draw(Canvas canvas)
     {
         // If drawer isn't initialized, the draw effects are unspecified.
         if (!initialized()) throw new InternalError();
+        // Start by drawing background.
+        canvas.drawColor(Color.GREEN);
         final Player player = (Player) _gameScene.getPlayer();
         if (!player.isAlive())
         {
@@ -68,14 +70,14 @@ public class GameDrawer
     public Point getScreenPos(IPoint indexPosition)
     {
         final float x = _tileSize * indexPosition.X();
-        final float y = _screenSize.y - _tileSize * indexPosition.Y();
+        final float y = _screenSize.Y() - _tileSize * indexPosition.Y();
         return new Point(x, y);
     }
 
     public Point getIndexPos(IPoint screenPos)
     {
         final float x = screenPos.X() / _tileSize;
-        final float y = (_screenSize.y - screenPos.Y()) / _tileSize;
+        final float y = (_screenSize.Y() - screenPos.Y()) / _tileSize;
         return new Point(x, y);
     }
 

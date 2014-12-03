@@ -1,6 +1,4 @@
-package com.basicrunner.basicgames.basicrunner.Models.Interface;
-
-import android.graphics.RectF;
+package com.basicrunner.basicgames.basicrunner.Game.Interface;
 
 public interface IMovableObject
 {

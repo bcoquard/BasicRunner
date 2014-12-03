@@ -1,4 +1,4 @@
-package com.basicrunner.basicgames.basicrunner;
+package com.basicrunner.basicgames.basicrunner.Game;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -8,12 +8,14 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import com.basicrunner.basicgames.basicrunner.GUI.GameDrawer;
-import com.basicrunner.basicgames.basicrunner.Models.GameScene;
-import com.basicrunner.basicgames.basicrunner.Models.Point;
+import com.basicrunner.basicgames.basicrunner.Game.Models.GameScene;
+import com.basicrunner.basicgames.basicrunner.Game.Models.Point;
+import com.basicrunner.basicgames.basicrunner.MainActivity;
 
 public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     private final String TAG = getClass().getSimpleName();
 
+    private MainActivity _activity;
     private GameLoop _loop;
     private GameScene _gameScene;
     private final GameDrawer _gameDrawer;
@@ -22,9 +24,11 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         super(context);
         // Link the call back event to our game view.
         getHolder().addCallback(this);
-
         // Make the our game view able to receive events.
         setFocusable(true);
+
+        // Save our activity.
+        this._activity = (MainActivity)context;
 
         // Create our game loop and game objects.
         _loop = new GameLoop(getHolder(), this);
@@ -64,8 +68,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (event.getAction() == MotionEvent.BUTTON_BACK)
-            return super.onTouchEvent(event);
         // TODO: catch HUD touch here.
         final Point indexPos = _gameDrawer.getIndexPos(new Point(event.getX(), event.getY()));
         _gameScene.touchEvent(indexPos, event.getAction());
@@ -83,12 +85,14 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     public void updateLogic() {
         _gameScene.update();
+        if (!_gameScene.getPlayer().isAlive())
+        {
+            stopGame();
+            _activity.endGame();
+        }
     }
 
     public void drawLogic(Canvas canvas) {
-        // Start by drawing background.
-        canvas.drawColor(Color.GREEN);
-        // Draw game scene.
         _gameDrawer.draw(canvas);
     }
 }

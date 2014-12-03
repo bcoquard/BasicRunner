@@ -1,7 +1,7 @@
-package com.basicrunner.basicgames.basicrunner.Models;
+package com.basicrunner.basicgames.basicrunner.Game.Models;
 
-import com.basicrunner.basicgames.basicrunner.Models.Interface.IMovableObject;
-import com.basicrunner.basicgames.basicrunner.Models.Interface.IPoint;
+import com.basicrunner.basicgames.basicrunner.Game.Interface.IMovableObject;
+import com.basicrunner.basicgames.basicrunner.Game.Interface.IPoint;
 
 public class Player implements IMovableObject
 {

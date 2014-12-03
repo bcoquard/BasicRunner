@@ -1,11 +1,11 @@
-package com.basicrunner.basicgames.basicrunner.Models;
+package com.basicrunner.basicgames.basicrunner.Game.Models;
 
 import android.graphics.RectF;
 import android.view.MotionEvent;
 
-import com.basicrunner.basicgames.basicrunner.Models.Interface.IGameScene;
-import com.basicrunner.basicgames.basicrunner.Models.Interface.IMovableObject;
-import com.basicrunner.basicgames.basicrunner.Models.Interface.IPoint;
+import com.basicrunner.basicgames.basicrunner.Game.Interface.IGameScene;
+import com.basicrunner.basicgames.basicrunner.Game.Interface.IMovableObject;
+import com.basicrunner.basicgames.basicrunner.Game.Interface.IPoint;
 
 import java.util.ArrayList;
 import java.util.List;
