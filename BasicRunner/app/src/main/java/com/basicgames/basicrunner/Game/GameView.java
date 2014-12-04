@@ -92,7 +92,12 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         }
     }
 
-    public void drawLogic(Canvas canvas, String fps) {
+    public void drawLogic(Canvas canvas, float fps) {
+        _gameDrawer.draw(canvas);
+        _gameDrawer.drawFPS(canvas, fps);
+    }
+
+    public void drawLogic(Canvas canvas, double fps) {
         _gameDrawer.draw(canvas);
         _gameDrawer.drawFPS(canvas, fps);
     }

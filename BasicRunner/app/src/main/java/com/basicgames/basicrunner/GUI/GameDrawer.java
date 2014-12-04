@@ -94,12 +94,19 @@ public class GameDrawer {
         canvas.drawText("DEAD", 100, 100, _textPaint);
     }
 
-    public void drawFPS(Canvas canvas, String fps) {
+    public void drawFPS(Canvas canvas, double fps) {
         Paint fpsPaint = new Paint();
         fpsPaint.setColor(Color.BLACK);
         fpsPaint.setTextSize(20);
         fpsPaint.setStrokeWidth(2);
         canvas.drawText("FPS; " + fps, 20, 20, fpsPaint);
-        Log.d(TAG, "Average FPS:" + fps);
+    }
+
+    public void drawFPS(Canvas canvas, float fps) {
+        Paint fpsPaint = new Paint();
+        fpsPaint.setColor(Color.BLACK);
+        fpsPaint.setTextSize(20);
+        fpsPaint.setStrokeWidth(2);
+        canvas.drawText("FPS; " + fps, 20, 20, fpsPaint);
     }
 }
