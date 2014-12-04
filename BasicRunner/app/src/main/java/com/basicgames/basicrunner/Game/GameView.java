@@ -26,7 +26,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         setFocusable(true);
 
         // Save our activity.
-        this._activity = (MainActivity)context;
+        this._activity = (MainActivity) context;
 
         // Create our game loop and game objects.
         _loop = new GameLoop(getHolder(), this);
@@ -38,7 +38,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
         _gameDrawer.init(new Point(width, height));
-     }
+    }
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
@@ -67,6 +67,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         // TODO: catch HUD touch here.
+        if (event.getAction() == MotionEvent.BUTTON_BACK)
+            return super.onTouchEvent(event);
+
         final Point indexPos = _gameDrawer.getIndexPos(new Point(event.getX(), event.getY()));
         _gameScene.touchEvent(indexPos, event.getAction());
         return true;
@@ -83,8 +86,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     public void updateLogic() {
         _gameScene.update();
-        if (!_gameScene.getPlayer().isAlive())
-        {
+        if (!_gameScene.getPlayer().isAlive()) {
             stopGame();
             _activity.endGame();
         }
