@@ -12,11 +12,17 @@ public class Obstacle implements IMovableObject
     private boolean _alive;
     private float _velocity;
 
-    public Obstacle(Type type, Point position)
+    public Obstacle(Type type)
     {
         _type = type;
-        _position = position;
-        _velocity = 0.1f;
+        _position = new Point();
+        _velocity = 0.005f;
+        _alive = false;
+    }
+
+    public void init(Point position)
+    {
+        _position.setLocation(position);
         _alive = true;
     }
 
@@ -24,10 +30,6 @@ public class Obstacle implements IMovableObject
     public IPoint getPosition()
     {
         return _position;
-    }
-
-    public void setPosition(Point _position) {
-        this._position = _position;
     }
 
     @Override
@@ -47,9 +49,16 @@ public class Obstacle implements IMovableObject
         return _alive;
     }
 
-    public void update()
+    /**
+     * Moves the obstacle vertically according to it's velocity.
+     * Destroy the obstacle if it's vertical position is under 0;
+     * @param timePassed ms since the last update
+     */
+    public void update(int timePassed)
     {
-        _position.y -= _velocity;
+        _position.y -= _velocity * timePassed;
+        if (_position.Y() < 0)
+            _alive = false;
     }
 
     public enum Type

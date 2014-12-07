@@ -13,11 +13,12 @@ import java.util.Random;
 
 public class GameScene implements IGameScene
 {
+    private final String TAG = getClass().getName();
+
     public static final Point _size = new Point(10, 20);
     public final static Random random = new Random();
-    private final String TAG = getClass().getName();
-    private final int MAX_OBSTACLES = 15;
-    private final float OBSTACLE_PROB = 0.1f;
+    private final int MAX_OBSTACLES = 20;
+    private final float OBSTACLE_PROB = 0.08f;
     private final Player _player;
     private List<Obstacle> _obstacles;
     private IPoint _touchedPoint;
@@ -31,7 +32,7 @@ public class GameScene implements IGameScene
 
     public void init()
     {
-        _player.init(new Point(5, 2));
+        _player.init(new Point(5, 4));
         _obstacles.clear();
     }
 
@@ -53,39 +54,66 @@ public class GameScene implements IGameScene
         return _player;
     }
 
-    public void update()
+    public void touchEvent(IPoint position, int action)
     {
-        _player.update(_touchedPoint);
+        if (action == MotionEvent.ACTION_DOWN || action == MotionEvent.ACTION_MOVE)
+            _touchedPoint = position;
+        else if (action == MotionEvent.ACTION_UP)
+            _touchedPoint = null;
+    }
+
+    /**
+     * @param timePassed ms since the last update
+     */
+    public void update(int timePassed)
+    {
+        _player.update(timePassed, _touchedPoint);
+        obstaclePhysics(timePassed);
+        addObstacle();
+    }
+
+    /**
+     * Updates the obstacles and checks for collisions.
+     * Recycle dead obstacles.
+     */
+    private void obstaclePhysics(int timePassed)
+    {
         final RectF playerBox = getRect(_player);
-        // Update obstacles and check collisions.
-        for (int i = 0; i < _obstacles.size(); i++)
+        for (Obstacle obstacle : _obstacles)
         {
-            Obstacle obstacle = _obstacles.get(i);
-            if (obstacle.getPosition().Y() < 0)
-            {
-                obstacle.setPosition(new Point(random.nextInt((int) _size.x), 20));
-                i--;
-                continue;
-            }
+            obstacle.update(timePassed);
+            if (!obstacle.isAlive())
+                obstacle.init(new Point(random.nextInt((int) _size.x), 20));
             final RectF obstacleBox = getRect(obstacle);
             if (collide(playerBox, obstacleBox))
             {
                 _player.onCollision(obstacle);
                 break;
             }
-            obstacle.update();
         }
-        // Add new obstacles if needed.
-        if (_obstacles.size() < MAX_OBSTACLES && random.nextFloat() < OBSTACLE_PROB)
-            _obstacles.add(new Obstacle(Obstacle.Type.Wall,
-                    new Point(random.nextInt((int) _size.x), 20)));
-
-        // TODO: Check player death and define behavior.
     }
 
+    /**
+     * Checks if the two rectangles collide.
+     *
+     * @return true if the objects collide
+     */
     private boolean collide(RectF object1, RectF object2)
     {
         return object1.intersect(object2);
+    }
+
+    /**
+     * Add new obstacles if needed.
+     */
+    private void addObstacle()
+    {
+        if (_obstacles.size() < MAX_OBSTACLES && random.nextFloat() < OBSTACLE_PROB)
+        {
+            Obstacle obstacle = new Obstacle(Obstacle.Type.Wall);
+            obstacle.init(new Point(random.nextInt((int) _size.x), 20));
+            _obstacles.add(obstacle);
+        }
     }
 
     private RectF getRect(IMovableObject movableObject)
@@ -95,13 +123,5 @@ public class GameScene implements IGameScene
         final float sizeX = movableObject.getSize().X();
         final float sizeY = movableObject.getSize().Y();
         return new RectF(posX, posY, posX + sizeX, posY + sizeY);
-    }
-
-    public void touchEvent(IPoint position, int action)
-    {
-        if (action == MotionEvent.ACTION_DOWN || action == MotionEvent.ACTION_MOVE)
-            _touchedPoint = position;
-        else if (action == MotionEvent.ACTION_UP)
-            _touchedPoint = null;
     }
 }

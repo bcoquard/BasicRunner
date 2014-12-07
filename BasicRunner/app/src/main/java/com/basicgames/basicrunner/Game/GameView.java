@@ -3,69 +3,57 @@ package com.basicgames.basicrunner.Game;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.view.MotionEvent;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
+import android.view.View;
 
 import com.basicgames.basicrunner.GUI.GameDrawer;
+import com.basicgames.basicrunner.Game.Interface.IPoint;
 import com.basicgames.basicrunner.Game.Models.GameScene;
 import com.basicgames.basicrunner.Game.Models.Point;
 import com.basicgames.basicrunner.MainActivity;
 
-public class GameView extends SurfaceView implements SurfaceHolder.Callback {
+public class GameView extends View
+{
     private final String TAG = getClass().getSimpleName();
-    private final GameDrawer _gameDrawer;
-    private MainActivity _activity;
-    private GameLoop _loop;
-    private GameScene _gameScene;
 
-    public GameView(Context context) {
+    private final GameDrawer _gameDrawer;
+    private final MainActivity _activity;
+    private final GameScene _gameScene;
+    private boolean _initialized;
+    private StatisticManager _statisticsManager;
+
+    public GameView(Context context)
+    {
         super(context);
-        // Link the call back event to our game view.
-        getHolder().addCallback(this);
-        // Make the our game view able to receive events.
-        setFocusable(true);
 
         // Save our activity.
         this._activity = (MainActivity) context;
 
-        // Create our game loop and game objects.
-        _loop = new GameLoop(getHolder(), this);
+        // Create game objects.
         _gameScene = new GameScene();
-        _gameScene.init();
         _gameDrawer = new GameDrawer(_gameScene);
+        _statisticsManager = new StatisticManager();
+        _initialized = false;
+    }
+
+    /**
+     * Will reset the game without recreating all objects.
+     */
+    public void init()
+    {
+        _gameScene.init();
+        _statisticsManager.init();
     }
 
     @Override
-    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+    protected void onSizeChanged(int width, int height, int oldWidth, int oldHeight)
+    {
         _gameDrawer.init(new Point(width, height));
+        _initialized = true;
     }
 
     @Override
-    public void surfaceCreated(SurfaceHolder holder) {
-        if (_loop.getState() == Thread.State.NEW) {
-            _loop.setRunning(true);
-            _loop.start();
-        } else if (_loop.getState() == Thread.State.TERMINATED) {
-            _loop = new GameLoop(getHolder(), this);
-            _loop.setRunning(true);
-            _loop.start(); // Start a new thread
-        }
-    }
-
-    @Override
-    public void surfaceDestroyed(SurfaceHolder holder) {
-        boolean retry = true;
-        while (retry) {
-            try {
-                _loop.join();
-                retry = false;
-            } catch (InterruptedException e) {
-            }
-        }
-    }
-
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
+    public boolean onTouchEvent(MotionEvent event)
+    {
         // TODO: catch HUD touch here.
         if (event.getAction() == MotionEvent.BUTTON_BACK)
             return super.onTouchEvent(event);
@@ -76,29 +64,24 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     @Override
-    protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
-    }
+    protected void onDraw(Canvas canvas)
+    {
+        // Wait for onSizeChanged callback.
+        if (!_initialized) return;
 
-    public void stopGame() {
-        _loop.setRunning(false);
-    }
+        // Update statistics & get time passed since last update.
+        int timePassed = _statisticsManager.update();
 
-    public void updateLogic() {
-        _gameScene.update();
-        if (!_gameScene.getPlayer().isAlive()) {
-            stopGame();
+        // Update game objects.
+        _gameScene.update(timePassed);
+        if (!_gameScene.getPlayer().isAlive())
             _activity.endGame();
-        }
-    }
 
-    public void drawLogic(Canvas canvas, float fps) {
+        // Draw game objects.
         _gameDrawer.draw(canvas);
-        _gameDrawer.drawFPS(canvas, fps);
-    }
+        _gameDrawer.drawFPS(canvas, _statisticsManager.getFps());
 
-    public void drawLogic(Canvas canvas, double fps) {
-        _gameDrawer.draw(canvas);
-        _gameDrawer.drawFPS(canvas, fps);
+        // Make redraw.
+        invalidate();
     }
 }

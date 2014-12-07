@@ -7,14 +7,14 @@ public class Player implements IMovableObject
 {
     private final String TAG = getClass().getSimpleName();
 
-    private Point _position;
-    private Point _size;
-    private float _velocity;
+    private final Point _position;
+    private final Point _size;
+    private final float _velocity;
     private boolean _isAlive;
 
     public Player()
     {
-        _velocity = 0.1f;
+        _velocity = 0.005f;
         _position = new Point();
         _size = new Point(1, 1);
         _isAlive = false;
@@ -56,18 +56,22 @@ public class Player implements IMovableObject
         _isAlive = false;
     }
 
-    public void moveTo(IPoint directionPoint)
+    /**
+     * Moves the player towards the given point.
+     * @param timePassed ms since the last update
+     * @param directionPoint
+     */
+    public void moveTo(int timePassed, IPoint directionPoint)
     {
-        //Log.d(TAG, "object: " + _position + " -- doigt: " + directionPoint);
+        // TODO: Don't move the player if the distance is small.
         float tmpVelocity = _velocity;
-
         if (directionPoint.X() > _position.x + _size.x / 2)
         {
             if (directionPoint.X() - (_position.X() + _size.X() / 2) < _velocity)
                 tmpVelocity = directionPoint.X() - (_position.X() + _size.X() / 2);
             if (_position.X() + _size.X() / 2 + tmpVelocity > GameScene._size.X() - 1 + _size.X() / 2)
                 return;
-            _position.x += tmpVelocity;
+            _position.x += tmpVelocity * timePassed;
         }
         else if (directionPoint.X() < _position.x + _size.x / 2)
         {
@@ -75,21 +79,13 @@ public class Player implements IMovableObject
                 tmpVelocity = (_position.X() + _size.X() / 2) - directionPoint.X();
             if (_position.X() - tmpVelocity < 0)
                 return;
-            _position.x -= tmpVelocity;
+            _position.x -= tmpVelocity * timePassed;
         }
-        /*
-        if (directionPoint.X() > _position.x)
-            _position.x += _velocity;
-        else if (directionPoint.X() < _position.x)
-            _position.x -= _velocity;
-        */
     }
 
-    public void update(IPoint magnetPosition)
+    public void update(int timePassed, IPoint magnetPosition)
     {
-        // TODO: maybe determine player position from middle of the object.
         if (magnetPosition != null)
-            //_position.setLocation(magnetPosition);
-            moveTo(magnetPosition);
+            moveTo(timePassed, magnetPosition);
     }
 }

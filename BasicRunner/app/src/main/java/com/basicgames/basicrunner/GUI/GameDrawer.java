@@ -12,14 +12,17 @@ import com.basicgames.basicrunner.Game.Models.Player;
 import com.basicgames.basicrunner.Game.Models.Point;
 
 public class GameDrawer {
-    // Game object paints.
-    private static Paint _playerPaint;
-    private static Paint _obstaclePaint;
-    private static Paint _textPaint;
     private final String TAG = getClass().getSimpleName();
+
     private final IGameScene _gameScene;
     private IPoint _screenSize;
     private float _tileSize;
+
+    // Paints.
+    private final Paint _playerPaint;
+    private final Paint _obstaclePaint;
+    private final Paint _textPaint;
+    private final Paint _debugPaint;
 
     public GameDrawer(IGameScene gameScene) {
         _gameScene = gameScene;
@@ -30,18 +33,23 @@ public class GameDrawer {
         _obstaclePaint.setColor(Color.BLUE);
         _textPaint = new Paint();
         _textPaint.setColor(Color.RED);
+        _debugPaint = new Paint();
+        _debugPaint.setColor(Color.BLACK);
+        _debugPaint.setTextAlign(Paint.Align.CENTER);
     }
 
     public void init(IPoint screenSize) {
         _screenSize = screenSize;
-        _tileSize = screenSize.X() / _gameScene.getSize().X();
+        _tileSize = _screenSize.X() / _gameScene.getSize().X();
         _playerPaint.setStrokeWidth(_tileSize / 10);
         _obstaclePaint.setStrokeWidth(_tileSize / 10);
         _textPaint.setStrokeWidth(_tileSize);
+        _debugPaint.setTextSize(_tileSize / 4);
+        _debugPaint.setStrokeWidth(_tileSize / 20);
     }
 
     public boolean initialized() {
-        return (_screenSize != null);
+        return (_screenSize != null && _tileSize > 0);
     }
 
     public void draw(Canvas canvas) {
@@ -86,7 +94,6 @@ public class GameDrawer {
     private void drawObstacle(Canvas canvas, IMovableObject obstacle) {
         final IPoint pos = getScreenPos(obstacle.getPosition());
         final IPoint size = getScreenSize(obstacle.getSize());
-        Log.d(TAG, obstacle.getPosition().toString() + " -> " + pos.toString() + " : " + _tileSize);
         canvas.drawRect(pos.X(), pos.Y(), pos.X() + size.X(), pos.Y() + size.Y(), _obstaclePaint);
     }
 
@@ -94,19 +101,7 @@ public class GameDrawer {
         canvas.drawText("DEAD", 100, 100, _textPaint);
     }
 
-    public void drawFPS(Canvas canvas, double fps) {
-        Paint fpsPaint = new Paint();
-        fpsPaint.setColor(Color.BLACK);
-        fpsPaint.setTextSize(20);
-        fpsPaint.setStrokeWidth(2);
-        canvas.drawText("FPS; " + fps, 20, 20, fpsPaint);
-    }
-
-    public void drawFPS(Canvas canvas, float fps) {
-        Paint fpsPaint = new Paint();
-        fpsPaint.setColor(Color.BLACK);
-        fpsPaint.setTextSize(20);
-        fpsPaint.setStrokeWidth(2);
-        canvas.drawText("FPS; " + fps, 20, 20, fpsPaint);
+    public void drawFPS(Canvas canvas, int fps) {
+        canvas.drawText("FPS=" + fps, _screenSize.X() / 2, _tileSize / 3, _debugPaint);
     }
 }

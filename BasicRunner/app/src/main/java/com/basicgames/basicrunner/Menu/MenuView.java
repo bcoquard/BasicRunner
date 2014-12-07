@@ -29,6 +29,11 @@ public class MenuView extends View
         this._menuDrawer = new MenuDrawer();
     }
 
+    public void init()
+    {
+
+    }
+
     @Override
     public void onSizeChanged(int width, int height, int oldWidth, int oldHeight)
     {
