@@ -14,7 +14,7 @@ public class Player implements IMovableObject
 
     public Player()
     {
-        _velocity = 0.005f;
+        _velocity = 0.008f;
         _position = new Point();
         _size = new Point(1, 1);
         _isAlive = false;
@@ -57,35 +57,47 @@ public class Player implements IMovableObject
     }
 
     /**
-     * Moves the player towards the given point.
-     * @param timePassed ms since the last update
-     * @param directionPoint
+     * Updates position according to the given position.
+     *
+     * @param timePassed     ms since the last update
+     * @param directionPoint gives the player direction, may be null
      */
-    public void moveTo(int timePassed, IPoint directionPoint)
+    public void update(int timePassed, IPoint directionPoint, IPoint terrainSize)
     {
-        // TODO: Don't move the player if the distance is small.
-        float tmpVelocity = _velocity;
-        if (directionPoint.X() > _position.x + _size.x / 2)
-        {
-            if (directionPoint.X() - (_position.X() + _size.X() / 2) < _velocity)
-                tmpVelocity = directionPoint.X() - (_position.X() + _size.X() / 2);
-            if (_position.X() + _size.X() / 2 + tmpVelocity > GameScene._size.X() - 1 + _size.X() / 2)
-                return;
-            _position.x += tmpVelocity * timePassed;
-        }
-        else if (directionPoint.X() < _position.x + _size.x / 2)
-        {
-            if ((_position.X() + _size.X() / 2) - directionPoint.X() < _velocity)
-                tmpVelocity = (_position.X() + _size.X() / 2) - directionPoint.X();
-            if (_position.X() - tmpVelocity < 0)
-                return;
-            _position.x -= tmpVelocity * timePassed;
-        }
+        if (directionPoint == null)
+            return;
+        // Displace the direction so the player is centered.
+        final float correctedX = directionPoint.X() - _size.X() / 2;
+        final float correctedY = directionPoint.Y() - _size.Y() / 2;
+        moveTo(timePassed, new Point(correctedX, correctedY), terrainSize);
     }
 
-    public void update(int timePassed, IPoint magnetPosition)
+    /**
+     * Moves the player towards the given point.
+     *
+     * @param timePassed     ms since the last update
+     * @param directionPoint gives the player direction, may be null
+     */
+    private void moveTo(int timePassed, IPoint directionPoint, IPoint terrainSize)
     {
-        if (magnetPosition != null)
-            moveTo(timePassed, magnetPosition);
+        // Don't move the player if the distance is small.
+        final float threshold = _velocity * timePassed;
+        if (Math.abs(directionPoint.X() - _position.X()) < threshold)
+        {
+            _position.x = directionPoint.X();
+        }
+        else
+        {
+            _position.x += normalize(directionPoint.X() - _position.X()) * _velocity * timePassed;
+        }
+        if (_position.X() < 0)
+            _position.x = 0;
+        if (_position.X() > terrainSize.X() - 1)
+            _position.x = terrainSize.X() - 1;
+    }
+
+    private int normalize(float x)
+    {
+        return (x > 0) ? 1 : -1;
     }
 }

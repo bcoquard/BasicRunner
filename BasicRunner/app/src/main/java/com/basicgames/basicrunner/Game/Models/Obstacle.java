@@ -52,6 +52,7 @@ public class Obstacle implements IMovableObject
     /**
      * Moves the obstacle vertically according to it's velocity.
      * Destroy the obstacle if it's vertical position is under 0;
+     *
      * @param timePassed ms since the last update
      */
     public void update(int timePassed)

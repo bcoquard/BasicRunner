@@ -27,13 +27,13 @@ public class GameScene implements IGameScene
     {
         _player = new Player();
         _obstacles = new ArrayList<Obstacle>();
-        _touchedPoint = null;
     }
 
     public void init()
     {
         _player.init(new Point(5, 4));
         _obstacles.clear();
+        _touchedPoint = null;
     }
 
     @Override
@@ -67,7 +67,7 @@ public class GameScene implements IGameScene
      */
     public void update(int timePassed)
     {
-        _player.update(timePassed, _touchedPoint);
+        _player.update(timePassed, _touchedPoint, _size);
         obstaclePhysics(timePassed);
         addObstacle();
     }
@@ -81,7 +81,6 @@ public class GameScene implements IGameScene
         final RectF playerBox = getRect(_player);
         for (Obstacle obstacle : _obstacles)
         {
-            obstacle.update(timePassed);
             if (!obstacle.isAlive())
                 obstacle.init(new Point(random.nextInt((int) _size.x), 20));
             final RectF obstacleBox = getRect(obstacle);
@@ -90,6 +89,8 @@ public class GameScene implements IGameScene
                 _player.onCollision(obstacle);
                 break;
             }
+            // Update at the end so the player actually sees the objects intersect.
+            obstacle.update(timePassed);
         }
     }
 

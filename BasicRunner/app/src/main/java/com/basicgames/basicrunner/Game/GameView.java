@@ -6,7 +6,6 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.basicgames.basicrunner.GUI.GameDrawer;
-import com.basicgames.basicrunner.Game.Interface.IPoint;
 import com.basicgames.basicrunner.Game.Models.GameScene;
 import com.basicgames.basicrunner.Game.Models.Point;
 import com.basicgames.basicrunner.MainActivity;
